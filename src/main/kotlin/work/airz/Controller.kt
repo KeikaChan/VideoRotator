@@ -7,6 +7,7 @@ import javafx.fxml.Initializable
 import javafx.scene.control.*
 import javafx.scene.input.DragEvent
 import javafx.scene.input.TransferMode
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
@@ -39,6 +40,10 @@ class Controller : Initializable {
     private lateinit var audiorate: TextField
     @FXML
     private lateinit var progress: ProgressIndicator
+    @FXML
+    private lateinit var issameinput: CheckBox
+    @FXML
+    private lateinit var videosettings: GridPane
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         height.text = 0.toString()
@@ -47,6 +52,11 @@ class Controller : Initializable {
         ratenumerator.text = 0.toString()
         ratedenominator.text = 0.toString()
         audiorate.text = 0.toString()
+        issameinput.isSelected = true
+
+        issameinput.selectedProperty().addListener { observable, oldValue, newValue ->
+            videosettings.isDisable = newValue
+        }
 
         height.textProperty().addListener { _, oldValue, newValue ->
             if (!intValidate(newValue.toString())) {
@@ -127,6 +137,7 @@ class Controller : Initializable {
             Platform.runLater { progress.isVisible = true }
             targetList.forEach {
                 Platform.runLater { genelog.text = "${it.name}を変換中" }
+                runBlocking { if(issameinput.isSelected) loadValues(it) }
                 encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong())
             }
             Platform.runLater { progress.isVisible = false }
