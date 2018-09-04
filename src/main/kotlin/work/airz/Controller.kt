@@ -136,8 +136,8 @@ class Controller : Initializable {
         launch {
             Platform.runLater { progress.isVisible = true }
             targetList.forEach {
-                Platform.runLater { genelog.text = "${it.name}を変換中" }
                 runBlocking { if(issameinput.isSelected) loadValues(it) }
+                Platform.runLater { genelog.text = "${it.name}を変換中" }
                 encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong())
             }
             Platform.runLater { progress.isVisible = false }
