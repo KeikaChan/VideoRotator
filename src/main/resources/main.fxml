@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="mainpage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="520.0" minWidth="700.0" onDragDropped="#handleDropped" onDragOver="#handleDragOver" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #ECEFF1;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="work.airz.Controller">
+    <children>
+        <ToolBar maxHeight="56.0" maxWidth="1.7976931348623157E308" minHeight="56.0" prefHeight="56.0" style="-fx-background-color: #2196F3;">
+            <Pane prefHeight="56.0" prefWidth="245.0">
+                <children>
+                    <Label layoutX="14.0" layoutY="12.0" lineSpacing="8.0" text="動画変換" textFill="WHITE">
+                        <font>
+                            <Font name="System Bold" size="16.0" />
+                        </font>
+                    </Label>
+                </children>
+            </Pane>
+        </ToolBar>
+        <VBox minHeight="400.0" minWidth="650.0" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #FAFAFA;">
+            <children>
+                <VBox prefHeight="156.0" prefWidth="652.0">
+
+
+                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <Button fx:id="picker" minWidth="90.0" onAction="#buttonsHandler" style="-fx-background-color: #9C27B0;" text="ファイル選択…" textFill="WHITE" />
+                        <padding>
+                            <Insets bottom="10.0" left="10.0" top="10.0" />
+                        </padding>
+                    </HBox>
+                    <GridPane style="-fx-background-color: #81C784;">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="33.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                <children>
+                                    <Label text="解像度">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <TextField fx:id="width" prefHeight="27.0" prefWidth="57.0">
+                                        <opaqueInsets>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </opaqueInsets>
+                                    </TextField>
+                                    <Label text="x">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <TextField fx:id="height" prefHeight="27.0" prefWidth="57.0">
+                                        <opaqueInsets>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </opaqueInsets>
+                                    </TextField>
+                                </children>
+                                <opaqueInsets>
+                                    <Insets bottom="20.0" top="20.0" />
+                                </opaqueInsets>
+                            </HBox>
+                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <children>
+                                    <Label text="動画ビットレート">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <TextField fx:id="videorate" prefHeight="27.0" prefWidth="88.0">
+                                        <opaqueInsets>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </opaqueInsets>
+                                    </TextField>
+                                    <Label text="bps">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                </children>
+                            </HBox>
+                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                <children>
+                                    <Label text="フレームレート">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <TextField fx:id="ratenumerator" prefHeight="27.0" prefWidth="58.0">
+                                        <opaqueInsets>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </opaqueInsets>
+                                    </TextField>
+                                    <Label text="/">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                           <TextField fx:id="ratedenominator" prefHeight="27.0" prefWidth="58.0">
+                              <opaqueInsets>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </opaqueInsets>
+                           </TextField>
+                                </children>
+                            </HBox>
+                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <children>
+                                    <Label text="音ビットレート">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                    <TextField fx:id="audiorate" prefHeight="27.0" prefWidth="88.0">
+                                        <opaqueInsets>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </opaqueInsets>
+                                    </TextField>
+                                    <Label text="bps">
+                                        <padding>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </padding>
+                                    </Label>
+                                </children>
+                            </HBox>
+                            <Label text="変換設定">
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                </GridPane.margin>
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Label>
+                        </children>
+                        <VBox.margin>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </VBox.margin>
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                    </GridPane>
+
+                    <HBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="200.0">
+                        <Label text="選択済みファイル">
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                        </Label>
+                        <VBox.margin>
+                            <Insets left="5.0" right="5.0" top="20.0" />
+                        </VBox.margin>
+
+                    </HBox>
+
+                    <ListView fx:id="fileList" minHeight="150.0" prefHeight="150.0" prefWidth="604.0" style="-fx-background-color: #DDDDDD;">
+                        <padding>
+                            <Insets left="5.0" right="5.0" />
+                        </padding>
+                        <VBox.margin>
+                            <Insets left="10.0" right="10.0" />
+                        </VBox.margin>
+                    </ListView>
+
+                    <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0">
+                        <Button fx:id="clear" layoutX="616.0" layoutY="107.0" onAction="#buttonsHandler" style="-fx-background-color: #FCFCFC;" text="クリア" textAlignment="RIGHT" />
+                    </VBox>
+                    <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
+                        <Button fx:id="generate" minWidth="100.0" onAction="#buttonsHandler" style="-fx-background-color: #F44336;" text="変換スタート！！" textFill="WHITE" />
+                        <ProgressIndicator fx:id="progress" visible="false" />
+                        <padding>
+                            <Insets left="10.0" />
+                        </padding>
+                    </HBox>
+
+                    <Label fx:id="genelog" text="作成ボタンを押してください...">
+                        <padding>
+                            <Insets left="10.0" />
+                        </padding>
+                    </Label>
+                    <opaqueInsets>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>
