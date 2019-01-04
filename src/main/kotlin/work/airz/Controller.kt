@@ -131,12 +131,12 @@ class Controller : Initializable {
     }
 
     private fun continuousEncode() {
-        val outputDir = getDir()
+        val outputDir = getDir() ?: return
         val targetList = fileList.items.map { File(it.text) }
         launch {
             Platform.runLater { progress.isVisible = true }
             targetList.forEach {
-                runBlocking { if(issameinput.isSelected) loadValues(it) }
+                runBlocking { if (issameinput.isSelected) loadValues(it) }
                 Platform.runLater { genelog.text = "${it.name}を変換中" }
                 encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong())
             }
@@ -182,12 +182,12 @@ class Controller : Initializable {
         }
     }
 
-    private fun getDir(): File {
+    private fun getDir(): File? {
         val chooser = DirectoryChooser()
         chooser.apply {
             title = "select output dir"
             initialDirectory = File(System.getProperty("user.dir"))
         }
-        return chooser.showDialog(mainpage.scene.window) ?: File(System.getProperty("user.dir"))
+        return chooser.showDialog(mainpage.scene.window)
     }
 }

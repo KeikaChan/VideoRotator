@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
 class App : Application() {
     companion object {
-        const val WINDOW_HEIGHT = 520.0
+        const val WINDOW_HEIGHT = 540.0
         const val WINDOW_WIDTH = 700.0
 
     }
