@@ -44,7 +44,7 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
             .setVideoBitRate(videorate)
             .setVideoResolution(width, height) // at 640x480 resolution
             .setFormat("mp4")
-            .addExtraArgs("-vf", "transpose=2", "-c:v", "hevc_videotoolbox") //only work Macbooks
+            .addExtraArgs("-vf", "transpose=2", "-c:v", "hevc_videotoolbox", "-tag:v", "hvc1") //only work Macbooks
 //            .setVideoQuality(16.0)
             .done()
 
