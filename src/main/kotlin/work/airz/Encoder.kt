@@ -9,8 +9,10 @@ import java.io.File
 
 fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate: Long, ratenum: Int, ratedeno: Int, audiorate: Long) {
     val currentDir = System.getProperty("user.dir")
-    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
-    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
+//    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
+//    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
+    val ffmpegExec = File("/usr/local/bin/ffmpeg")
+    val ffprobeExec = File("/usr/local/bin/ffprobe")
     if (!ffmpegExec.exists() || !ffprobeExec.exists()) {
         println("encoder does not exist!")
     }
@@ -35,13 +37,14 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
             .setAudioCodec(audioFormat.codec_name)        // using the aac codec
             .setAudioSampleRate(audioFormat.sample_rate)  // at 48KHz
             .setAudioBitRate(audiorate)      // at 32 kbit/s
-
-            .setVideoCodec("libx264")     // Video using x264
+            .setPreset("slow")
+            .setVideoCodec("hevc")     // Video using x264
+            .setConstantRateFactor(18.0) //h.265用
             .setVideoFrameRate(ratenum, ratedeno)
             .setVideoBitRate(videorate)
             .setVideoResolution(width, height) // at 640x480 resolution
             .setFormat("mp4")
-            .addExtraArgs("-vf", "transpose=2")
+            .addExtraArgs("-vf", "transpose=2", "-c:v", "hevc_videotoolbox") //only work Macbooks
 //            .setVideoQuality(16.0)
             .done()
 
