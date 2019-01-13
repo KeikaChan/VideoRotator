@@ -6,13 +6,14 @@ import net.bramp.ffmpeg.FFprobe
 import net.bramp.ffmpeg.builder.FFmpegBuilder
 import java.io.File
 
+val ffmpegExec = File("/usr/local/bin/ffmpeg")
+val ffprobeExec = File("/usr/local/bin/ffprobe")
 
 fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate: Long, ratenum: Int, ratedeno: Int, audiorate: Long) {
     val currentDir = System.getProperty("user.dir")
 //    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
 //    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
-    val ffmpegExec = File("/usr/local/bin/ffmpeg")
-    val ffprobeExec = File("/usr/local/bin/ffprobe")
+
     if (!ffmpegExec.exists() || !ffprobeExec.exists()) {
         println("encoder does not exist!")
     }

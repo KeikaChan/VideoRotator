@@ -146,7 +146,7 @@ class Controller : Initializable {
     }
 
     private fun loadValues(input: File) {
-        val ffprobeExec = File(System.getProperty("user.dir") + File.separator + "encoder", getExtByPlatform("ffprobe"))
+
         genelog.text = if (!ffprobeExec.exists()) {
             "エンコーダーがありません！"
         } else {
