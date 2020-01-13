@@ -15,6 +15,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFprobe
+import net.bramp.ffmpeg.probe.FFmpegStream
 import java.io.File
 import java.net.URL
 import java.util.*
@@ -44,6 +45,8 @@ class Controller : Initializable {
     private lateinit var issameinput: CheckBox
     @FXML
     private lateinit var videosettings: GridPane
+    @FXML
+    private lateinit var isrotate: CheckBox
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         height.text = 0.toString()
@@ -53,7 +56,12 @@ class Controller : Initializable {
         ratedenominator.text = 0.toString()
         audiorate.text = 0.toString()
         issameinput.isSelected = true
-
+        isrotate.isSelected = true
+        isrotate.selectedProperty().addListener { observable, oldValue, newValue ->
+            if (fileList.items.size != 0) {
+                loadValues(File(fileList.items.first().text), newValue)
+            }
+        }
         issameinput.selectedProperty().addListener { observable, oldValue, newValue ->
             videosettings.isDisable = newValue
         }
@@ -92,7 +100,6 @@ class Controller : Initializable {
 
     private fun intValidate(number: String): Boolean {
         return try {
-            println(number)
             number.toInt()
             true
         } catch (e: NumberFormatException) {
@@ -110,7 +117,7 @@ class Controller : Initializable {
     fun handleDropped(event: DragEvent) {
         if (event.dragboard.hasFiles()) {
             event.dragboard.files.forEach {
-                event.isDropCompleted = if (!it.isDirectory && it.extension == "mp4") {
+                event.isDropCompleted = if (!it.isDirectory && (it.extension == "mp4" || it.extension == "mov")) {
                     loadValues(it)
                     fileList.items.add(Label(it.absolutePath))
                     true
@@ -138,14 +145,14 @@ class Controller : Initializable {
             targetList.forEach {
                 runBlocking { if (issameinput.isSelected) loadValues(it) }
                 Platform.runLater { genelog.text = "${it.name}を変換中" }
-                encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong())
+                encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong(), isrotate.isSelected)
             }
             Platform.runLater { progress.isVisible = false }
             Platform.runLater { genelog.text = "完了♪" }
         }
     }
 
-    private fun loadValues(input: File) {
+    private fun loadValues(input: File, isRotate: Boolean = isrotate.isSelected) {
 
         genelog.text = if (!ffprobeExec.exists()) {
             "エンコーダーがありません！"
@@ -156,14 +163,19 @@ class Controller : Initializable {
         val ffmprobe = FFprobe(ffprobeExec.absolutePath)
 
         val format = ffmprobe.probe(input.absolutePath)
-        val videoFormat = format.streams[0]
-        val audioFormat = format.streams[1]
-        height.text = videoFormat.width.toString()
-        width.text = videoFormat.height.toString()
+        val videoFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.VIDEO }
+        val audioFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.AUDIO }
+
+        val oldWidth = videoFormat.width.toString()
+        val oldHeight = videoFormat.height.toString()
+        height.text = if(isRotate) oldWidth else oldHeight
+        width.text = if(isRotate) oldHeight else oldWidth
+
         videorate.text = videoFormat.bit_rate.toString()
         ratenumerator.text = videoFormat.r_frame_rate.numerator.toString()
         ratedenominator.text = videoFormat.r_frame_rate.denominator.toString()
         audiorate.text = audioFormat.bit_rate.toString()
+
     }
 
     private fun getMultipleFiles() {
@@ -171,7 +183,7 @@ class Controller : Initializable {
         chooser.apply {
             title = "select video file(s)"
             initialDirectory = File(System.getProperty("user.dir"))
-            extensionFilters.add(FileChooser.ExtensionFilter("mp4 files", "*.mp4"))
+            extensionFilters.add(FileChooser.ExtensionFilter("video files", "*.mp4", "*.mov"))
         }
         val selected = chooser.showOpenMultipleDialog(mainpage.scene.window)
         if (selected.isNotEmpty()) {

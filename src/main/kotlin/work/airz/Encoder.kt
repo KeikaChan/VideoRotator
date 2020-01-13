@@ -1,15 +1,17 @@
 package work.airz
 
+import javafx.scene.transform.Rotate
 import net.bramp.ffmpeg.FFmpeg
 import net.bramp.ffmpeg.FFmpegExecutor
 import net.bramp.ffmpeg.FFprobe
 import net.bramp.ffmpeg.builder.FFmpegBuilder
+import net.bramp.ffmpeg.probe.FFmpegStream
 import java.io.File
 
 val ffmpegExec = File("/usr/local/bin/ffmpeg")
 val ffprobeExec = File("/usr/local/bin/ffprobe")
 
-fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate: Long, ratenum: Int, ratedeno: Int, audiorate: Long) {
+fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate: Long, ratenum: Int, ratedeno: Int, audiorate: Long,isRotate: Boolean) {
     val currentDir = System.getProperty("user.dir")
 //    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
 //    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
@@ -26,14 +28,21 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
      * streams[0]がビデオ,streams[1]がオーディオ
      */
     val format = ffmprobe.probe(input.absolutePath)
-    val videoFormat = format.streams[0]
-    val audioFormat = format.streams[1]
+    val videoFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.VIDEO }
+    val audioFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.AUDIO }
+
+    var extraArgs = if (isRotate){
+        arrayListOf("-vf", "transpose=2")
+    }else{
+        arrayListOf()
+    }
+    extraArgs.addAll(listOf("-c:v", "hevc_videotoolbox", "-tag:v", "hvc1"))
 
 //    //now encoding
     val ffmpegBuilder = FFmpegBuilder()
             .setInput(input.absolutePath)
             .overrideOutputFiles(true)
-            .addOutput(File(destFolder.absolutePath, "${input.nameWithoutExtension}-rotate.${input.extension}").absolutePath)
+            .addOutput(File(destFolder.absolutePath, "${input.nameWithoutExtension}-rotate.mp4").absolutePath)
             .setAudioChannels(audioFormat.channels)
             .setAudioCodec(audioFormat.codec_name)        // using the aac codec
             .setAudioSampleRate(audioFormat.sample_rate)  // at 48KHz
@@ -45,7 +54,7 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
             .setVideoBitRate(videorate)
             .setVideoResolution(width, height) // at 640x480 resolution
             .setFormat("mp4")
-            .addExtraArgs("-vf", "transpose=2", "-c:v", "hevc_videotoolbox", "-tag:v", "hvc1") //only work Macbooks
+            .addExtraArgs(*extraArgs.toTypedArray()) //only work Macbooks
 //            .setVideoQuality(16.0)
             .done()
 

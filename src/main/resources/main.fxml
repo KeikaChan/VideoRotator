@@ -171,7 +171,15 @@
                             <Insets />
                         </opaqueInsets>
                     </GridPane>
-
+                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                        <children>
+                            <CheckBox fx:id="isrotate" mnemonicParsing="false" selected="true" text="270°回転する">
+                                <padding>
+                                    <Insets left="10.0" right="5.0" top="5.0" />
+                                </padding>
+                            </CheckBox>
+                        </children>
+                    </HBox>
                     <HBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="200.0">
                         <Label text="選択済みファイル">
                             <VBox.margin>
