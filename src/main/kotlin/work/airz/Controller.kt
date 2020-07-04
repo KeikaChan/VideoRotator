@@ -23,30 +23,49 @@ import java.util.*
 class Controller : Initializable {
     @FXML
     private lateinit var mainpage: Pane
+
     @FXML
     private lateinit var fileList: ListView<Label>
+
     @FXML
     private lateinit var genelog: Label
+
     @FXML
     private lateinit var height: TextField
+
     @FXML
     private lateinit var width: TextField
+
     @FXML
     private lateinit var videorate: TextField
+
     @FXML
     private lateinit var ratenumerator: TextField
+
     @FXML
     private lateinit var ratedenominator: TextField
+
     @FXML
     private lateinit var audiorate: TextField
+
     @FXML
     private lateinit var progress: ProgressIndicator
+
     @FXML
     private lateinit var issameinput: CheckBox
+
     @FXML
     private lateinit var videosettings: GridPane
+
     @FXML
     private lateinit var isrotate: CheckBox
+
+    @FXML
+    private lateinit var isdeinterlace: CheckBox
+
+    @FXML
+    private lateinit var ishalfframerate: CheckBox
+
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         height.text = 0.toString()
