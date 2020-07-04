@@ -182,7 +182,17 @@
                         <children>
                             <CheckBox fx:id="isrotate" mnemonicParsing="false" selected="true" text="270°回転する">
                                 <padding>
-                                    <Insets left="10.0" right="5.0" top="5.0" />
+                                    <Insets left="10.0" right="5.0" top="5.0"/>
+                                </padding>
+                            </CheckBox>
+                            <CheckBox fx:id="isdeinterlace" mnemonicParsing="false" text="インターレース解除">
+                                <padding>
+                                    <Insets left="10.0" right="5.0" top="5.0"/>
+                                </padding>
+                            </CheckBox>
+                            <CheckBox fx:id="ishalfframerate" mnemonicParsing="false" text="フレームレート半減">
+                                <padding>
+                                    <Insets left="10.0" right="5.0" top="5.0"/>
                                 </padding>
                             </CheckBox>
                         </children>

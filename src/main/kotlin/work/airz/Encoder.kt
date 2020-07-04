@@ -7,11 +7,24 @@ import net.bramp.ffmpeg.FFprobe
 import net.bramp.ffmpeg.builder.FFmpegBuilder
 import net.bramp.ffmpeg.probe.FFmpegStream
 import java.io.File
+import java.lang.StringBuilder
 
 val ffmpegExec = File("/usr/local/bin/ffmpeg")
 val ffprobeExec = File("/usr/local/bin/ffprobe")
 
-fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate: Long, ratenum: Int, ratedeno: Int, audiorate: Long,isRotate: Boolean) {
+fun encodeFile(
+        input: File,
+        destFolder: File,
+        height: Int,
+        width: Int,
+        videorate: Long,
+        ratenum: Int,
+        ratedeno: Int,
+        audiorate: Long,
+        isRotate: Boolean,
+        isDeinterlace: Boolean,
+        isHalfFrameRate:Boolean
+) {
     val currentDir = System.getProperty("user.dir")
 //    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
 //    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
@@ -31,13 +44,14 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
     val videoFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.VIDEO }
     val audioFormat = format.streams.first { it.codec_type == FFmpegStream.CodecType.AUDIO }
 
-    var extraArgs = if (isRotate){
-        arrayListOf("-vf", "transpose=2")
-    }else{
-        arrayListOf()
-    }
-    extraArgs.addAll(listOf("-c:v", "hevc_videotoolbox", "-tag:v", "hvc1"))
+    val vfargs = arrayListOf<String>()
+    if (isDeinterlace) vfargs.add("yadif")
+    if (isRotate) vfargs.add("transpose=2")
 
+    val vfargString = StringBuilder()
+    vfargs.joinTo(buffer = vfargString, separator = ",")
+
+    var extraArgs = arrayListOf("-c:v", "hevc_videotoolbox", "-tag:v", "hvc1")
 //    //now encoding
     val ffmpegBuilder = FFmpegBuilder()
             .setInput(input.absolutePath)
@@ -48,9 +62,13 @@ fun encodeFile(input: File, destFolder: File, height: Int, width: Int, videorate
             .setAudioSampleRate(audioFormat.sample_rate)  // at 48KHz
             .setAudioBitRate(audiorate)      // at 32 kbit/s
             .setPreset("slow")
+            .setVideoFilter(vfargString.toString())
             .setVideoCodec("hevc")     // Video using x264
             .setConstantRateFactor(18.0) //h.265用
-            .setVideoFrameRate(ratenum, ratedeno)
+            .setVideoFrameRate(
+                    if (isHalfFrameRate) (ratenum/2) else ratenum, //フレームレートを半減させる
+                    ratedeno
+            )
             .setVideoBitRate(videorate)
             .setVideoResolution(width, height) // at 640x480 resolution
             .setFormat("mp4")

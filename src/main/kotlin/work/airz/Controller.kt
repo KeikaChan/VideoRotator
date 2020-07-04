@@ -74,6 +74,8 @@ class Controller : Initializable {
         ratenumerator.text = 0.toString()
         ratedenominator.text = 0.toString()
         audiorate.text = 0.toString()
+        isdeinterlace.isSelected = false
+        ishalfframerate.isSelected = false
         issameinput.isSelected = true
         isrotate.isSelected = true
         isrotate.selectedProperty().addListener { observable, oldValue, newValue ->
@@ -164,7 +166,19 @@ class Controller : Initializable {
             targetList.forEach {
                 runBlocking { if (issameinput.isSelected) loadValues(it) }
                 Platform.runLater { genelog.text = "${it.name}を変換中" }
-                encodeFile(it, outputDir, height.text.toInt(), width.text.toInt(), videorate.text.toLong(), ratenumerator.text.toInt(), ratedenominator.text.toInt(), audiorate.text.toLong(), isrotate.isSelected)
+                encodeFile(
+                        it,
+                        outputDir,
+                        height.text.toInt(),
+                        width.text.toInt(),
+                        videorate.text.toLong(),
+                        ratenumerator.text.toInt(),
+                        ratedenominator.text.toInt(),
+                        audiorate.text.toLong(),
+                        isrotate.isSelected,
+                        isdeinterlace.isSelected,
+                        ishalfframerate.isSelected
+                )
             }
             Platform.runLater { progress.isVisible = false }
             Platform.runLater { genelog.text = "完了♪" }
@@ -187,8 +201,8 @@ class Controller : Initializable {
 
         val oldWidth = videoFormat.width.toString()
         val oldHeight = videoFormat.height.toString()
-        height.text = if(isRotate) oldWidth else oldHeight
-        width.text = if(isRotate) oldHeight else oldWidth
+        height.text = if (isRotate) oldWidth else oldHeight
+        width.text = if (isRotate) oldHeight else oldWidth
 
         videorate.text = videoFormat.bit_rate.toString()
         ratenumerator.text = videoFormat.r_frame_rate.numerator.toString()
