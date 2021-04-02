@@ -9,8 +9,9 @@ import net.bramp.ffmpeg.probe.FFmpegStream
 import java.io.File
 import java.lang.StringBuilder
 
-val ffmpegExec = File("/usr/local/bin/ffmpeg")
-val ffprobeExec = File("/usr/local/bin/ffprobe")
+val currentDir = System.getProperty("user.dir")
+val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
+val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
 
 fun encodeFile(
         input: File,
@@ -25,9 +26,7 @@ fun encodeFile(
         isDeinterlace: Boolean,
         isHalfFrameRate:Boolean
 ) {
-    val currentDir = System.getProperty("user.dir")
-//    val ffmpegExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffmpeg"))
-//    val ffprobeExec = File(currentDir + File.separator + "encoder", getExtByPlatform("ffprobe"))
+
 
     if (!ffmpegExec.exists() || !ffprobeExec.exists()) {
         println("encoder does not exist!")
