@@ -51,7 +51,7 @@ fun encodeFile(
     val vfargString = StringBuilder()
     vfargs.joinTo(buffer = vfargString, separator = ",")
 
-    var extraArgs = arrayListOf("-c:v", "hevc_videotoolbox", "-tag:v", "hvc1")
+    var extraArgs = arrayListOf("-vcodec", "hevc_amf", "-tag:v", "hvc1")
 //    //now encoding
     val ffmpegBuilder = FFmpegBuilder()
             .setInput(input.absolutePath)
